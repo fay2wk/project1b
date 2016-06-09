@@ -9,14 +9,14 @@ canvas.style = 'position:absolute; left: 45%; width: 560px; margin-left: -200px;
 document.body.appendChild(canvas)
 // Position variables
 var x = canvas.width / 2
-var y = canvas.height - 30
+var y = canvas.height - 60
 var ballRadius = 10
 var x2 = canvas.width / 2
-var y2 = canvas.height - 20
-var dx = 4
-var dy = -4
-var dx2 = 3
-var dy2 = -3
+var y2 = canvas.height - 60
+var dx = 5
+var dy = -5
+var dx2 = 4
+var dy2 = -4
 // Paddle variables
 var paddleHeight = 10
 var paddleWidth = 75
@@ -46,6 +46,12 @@ document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('keyup', keyUpHandler, false)
 
 function keyDownHandler (e) {
+  if (e.keyCode === 13) {
+    draw()
+  }
+  if (e.keyCode === 81) {
+    document.location.reload()
+  }
   if (e.keyCode === 39) {
     rightPressed = true
   }
@@ -67,13 +73,9 @@ function start () {
   drawScore()
   drawPaddle()
   drawLives()
+  startText()
 }
-// Starting window
-start ()
-$('.start').click(function () {
-  $('.start').toggleClass('hide')
-  return draw()
-})
+start()
 // clearRect() method take four parameters: the x and y coordinates of the top left corner of a rectangle, and the x and y coordinates of the bottom right corner of a rectangle.
 // Each brickX position is worked out as brickWidth + brickPadding, multiplied by the row number, c, plus the brickOffsetLeft; the logic for the brickY uses the values for column number, r, brickHeight, and brickOffsetTop. So every brick can be placed in its correct place row and column, with padding between each brick, drawn at an offset from the left and top canvas edges.
 function drawBall () {
@@ -139,6 +141,7 @@ function collisionDetection () {
         }
         if (score === brickRowCount * brickColumnCount) {
           winner()
+          resetText()
           cancelAnimationFrame(frame)
         }
       }
@@ -158,11 +161,18 @@ function collisionDetection2 () {
         }
         if (score === brickRowCount * brickColumnCount) {
           winner()
+          resetText()
           cancelAnimationFrame(frame)
         }
       }
     }
   }
+}
+
+function startText () {
+  ctx.font = '18px Futura'
+  ctx.fillStyle = '#F5F5F5'
+  ctx.fillText('Left and Right keys to move paddle. Enter to start.', 60, 300)
 }
 
 function drawScore () {
@@ -175,7 +185,7 @@ function drawLives () {
   ctx.font = '18px Futura'
   ctx.fillStyle ='#F5F5F5'
   ctx.fillText('Lives: ' + lives, 480, 20)
-}
+  }
 
 function winner () {
   ctx.font = '65px Futura'
@@ -187,6 +197,12 @@ function gameOver () {
   ctx.font = '65px Futura'
   ctx.fillStyle = '#F5F5F5'
   ctx.fillText('Game Over!', 80, 300)
+}
+
+function resetText () {
+  ctx.font = '20px Futura'
+  ctx.fillStyle = '#00FFF'
+  ctx.fillText('Press Q to restart.', 190, 400)
 }
 
 function draw () {
@@ -213,13 +229,15 @@ function draw () {
   else {
     lives--
     if(!lives) {
+      drawLives() - 1
       gameOver()
+      resetText()
       cancelAnimationFrame(frame)
     } else {
-      x2 = canvas.width / 3
-      y2 = canvas.height - 20
-      dx2 = 2
-      dy2 = -2
+      x2 = canvas.width / 2
+      y2 = canvas.height - 160
+      dx2 = 3
+      dy2 = -3
     }
     }
   }
@@ -239,14 +257,16 @@ function draw () {
   else {
       lives--
       if(!lives) {
+        drawLives() - 1
         gameOver()
+        resetText()
         cancelAnimationFrame(frame)
       }
       else {
         x = canvas.width / 2
-        y = canvas.height - 30
-        dx = 3
-        dy = -3
+        y = canvas.height - 160
+        dx = 4
+        dy = -4
       }
     }
   }
