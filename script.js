@@ -41,6 +41,8 @@ for (var c = 0; c < brickColumnCount; c++) {
 // Player status variables
 var score = 0
 var lives = 4
+// Sound
+var bounceSound = document.getElementById('sound')
 // For paddle movement. Events to listen to the keyboard.
 document.addEventListener('keydown', keyDownHandler, false)
 document.addEventListener('keyup', keyUpHandler, false)
@@ -137,12 +139,13 @@ function collisionDetection () {
         if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
           dy = -dy
           b.status = 0
+          bounceSound.play()
           score++
         }
         if (score === brickRowCount * brickColumnCount) {
           winner()
           resetText()
-          cancelAnimationFrame(frame)
+          cancelAnimationFrame()
         }
       }
     }
@@ -157,12 +160,13 @@ function collisionDetection2 () {
         if (x2 > b.x && x2 < b.x + brickWidth && y2 > b.y && y2 < b.y + brickHeight) {
           dy2 = -dy2
           b.status = 0
+          bounceSound.play()
           score++
         }
         if (score === brickRowCount * brickColumnCount) {
           winner()
           resetText()
-          cancelAnimationFrame(frame)
+          cancelAnimationFrame()
         }
       }
     }
@@ -190,7 +194,7 @@ function drawLives () {
 function winner () {
   ctx.font = '65px Futura'
   ctx.fillStyle = '#FF1493'
-  ctx.fillText('Winner!', 180, 300)
+  ctx.fillText('Winner!', 160, 300)
 }
 
 function gameOver () {
@@ -201,8 +205,8 @@ function gameOver () {
 
 function resetText () {
   ctx.font = '20px Futura'
-  ctx.fillStyle = '#00FFF'
-  ctx.fillText('Press Q to restart.', 190, 400)
+  ctx.fillStyle = '#00FFFF'
+  ctx.fillText('Press Q to restart.', 200, 400)
 }
 
 function draw () {
@@ -216,14 +220,17 @@ function draw () {
   collisionDetection2()
   if (x2 + dx2 > canvas.width - ballRadius || x2 + dx2 < ballRadius) {
     dx2 = -dx2
+    bounceSound.play()
   }
   if (y2 + dy2 < ballRadius) {
     dy2 = -dy2
+    bounceSound.play()
   }
   else if (y2 + dy2 > canvas.height - ballRadius) {
     if (x2 > paddleX && x2 < paddleX + paddleWidth) {
       if (y2 = y2 - paddleHeight) {
      dy2 = -dy2
+     bounceSound.play()
       }
     }
   else {
@@ -232,7 +239,7 @@ function draw () {
       drawLives() - 1
       gameOver()
       resetText()
-      cancelAnimationFrame(frame)
+      cancelAnimationFrame()
     } else {
       x2 = canvas.width / 2
       y2 = canvas.height - 160
@@ -244,14 +251,17 @@ function draw () {
   collisionDetection()
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx
+    bounceSound.play()
   }
   if (y + dy < ballRadius) {
     dy = -dy
+    bounceSound.play()
   }
   else if (y + dy > canvas.height - ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
         if (y = y - paddleHeight) {
           dy = -dy
+          bounceSound.play()
         }
     }
   else {
@@ -260,7 +270,7 @@ function draw () {
         drawLives() - 1
         gameOver()
         resetText()
-        cancelAnimationFrame(frame)
+        cancelAnimationFrame()
       }
       else {
         x = canvas.width / 2
